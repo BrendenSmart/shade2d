@@ -4,7 +4,9 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 
-public class GLVertexArrayObject {
+import static org.lwjgl.opengl.GL30.*;
+
+public final class GLVertexArrayObject {
 
     public static final int GLRGBA = 4;
 
@@ -18,10 +20,14 @@ public class GLVertexArrayObject {
 
     public static final int GL_SQUARES = GL_RECTANGLES;
 
+    public static final int GL_LINES = 2;
+
     private FloatBuffer vertices;
 
+    private int id;
+
     public GLVertexArrayObject(int vertexCount, int shape, int colorFormat) {
-        vertices = BufferUtils.createFloatBuffer(vertexCount * colorFormat * shape);
+
     }
 
     public void put(FloatBuffer vertices) {

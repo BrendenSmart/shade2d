@@ -1,9 +1,17 @@
 package jsdtk.shade2d;
 
+import jsdtk.shade2d.gl2d.GLVertexArrayObject;
+import jsdtk.shade2d.gl2d.GLVertexElementObject;
+
 public class ShadeGLGraphics2D implements ShadeGraphics2D {
 
-    public ShadeGLGraphics2D(AbstractGameWindow window) {
+    private GLVertexArrayObject vao;
 
+    private GLVertexElementObject veo;
+
+    protected ShadeGLGraphics2D(AbstractGameWindow window) {
+        vao = new GLVertexArrayObject(0, 0, 0);
+        veo = new GLVertexElementObject();
     }
 
     @Override

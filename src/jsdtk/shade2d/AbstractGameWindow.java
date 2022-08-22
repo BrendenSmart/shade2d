@@ -16,6 +16,10 @@ public abstract class AbstractGameWindow implements Runnable {
 
     private boolean waitEvents;
 
+    private boolean resizable, decorated;
+
+    private ShadeGraphics2D graphics;
+
     public AbstractGameWindow(String title, int width, int height, boolean resizable, boolean decorated) {
         init(title, width, height, resizable, decorated);
     }
@@ -24,10 +28,9 @@ public abstract class AbstractGameWindow implements Runnable {
         this.title = title;
         this.width = width;
         this.height = height;
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        this.resizable = resizable;
+        this.decorated = decorated;
+
         windowThread = new Thread(this, "shade2d-GameWindow Thread " + winCount++);
         windowThread.start();
     }
@@ -41,7 +44,7 @@ public abstract class AbstractGameWindow implements Runnable {
     private void runLoop() {
         while (!isCloseRequested()) {
             update();
-            draw();
+            draw(graphics);
             if (waitEvents)
                 glfwWaitEvents();
             else
@@ -53,13 +56,16 @@ public abstract class AbstractGameWindow implements Runnable {
         window = glfwCreateWindow(width, height, title, 0, 0);
 
         glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
+        graphics = new ShadeGLGraphics2D(this);
     }
 
     public abstract void update();
 
-    public abstract void draw();
+    public abstract void draw(ShadeGraphics2D g);
 
     public void glfwPoll() {
         glfwPollEvents();
